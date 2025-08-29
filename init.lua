@@ -5,6 +5,7 @@ local PARTICLE_AMOUNT = 2;
 local SPAWN_INTERVAL = 5;
 local PARTICLE_MOVEMENT_SPEED = 4;
 local PARTICLE_EXPIRED_TIME = 1;
+local SMOKE_PARTICLE_TEXTURE = "smoke.png";
 
 local particle_definitions = {
     ["group:leaves"] = {
@@ -17,28 +18,7 @@ local particle_definitions = {
                 return false
             end
         end,
-        particle = function(pos, node)
-            return {
-                amount = PARTICLE_AMOUNT,
-                time = SPAWN_INTERVAL,
-                node = { name = node.name },
-                object_collision = true,
-                collisiondetection = true,
-                collision_removal = true,
-                exptime = PARTICLE_EXPIRED_TIME,
-                playername = player,
-                pos = {
-                    min = vector.offset(pos, -0.5, 1.45, -0.5),
-                    max = vector.offset(pos, 0.5, 1.4, 0.5),
-                },
-                vel = vector.new(0, 0, 0),
-                acc = {
-                    x = 0.5 + math.random(-1, 1),
-                    y = PARTICLE_MOVEMENT_SPEED,
-                    z = 0.5 + math.random(-1, 1)
-                },
-            }
-        end,
+
     }
 }
 
@@ -80,6 +60,7 @@ local function update_particles()
                     collisiondetection = true,
                     collision_removal = true,
                     exptime = PARTICLE_EXPIRED_TIME,
+                    texture = SMOKE_PARTICLE_TEXTURE,
                     playername = player,
                     pos = {
                         min = vector.offset(lpos_above, -0.5, 0.45, -0.5),
