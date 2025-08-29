@@ -1,7 +1,10 @@
 -- Minetest mod: leaves_burning_particles forked from more_particles
 -- See README.md for licensing and other information.
 
-local PARTICLE_AMOUNT = 20;
+local PARTICLE_AMOUNT = 2;
+local SPAWN_INTERVAL = 5;
+local PARTICLE_MOVEMENT_SPEED = 4;
+local PARTICLE_EXPIRED_TIME = 1;
 
 local particle_definitions = {
     ["group:leaves"] = {
@@ -17,28 +20,32 @@ local particle_definitions = {
         particle = function(pos, node)
             return {
                 amount = PARTICLE_AMOUNT,
-                time = 5,
+                time = SPAWN_INTERVAL,
                 node = { name = node.name },
                 object_collision = true,
                 collisiondetection = true,
                 collision_removal = true,
-                exptime = 3,
+                exptime = PARTICLE_EXPIRED_TIME,
                 playername = player,
                 pos = {
                     min = vector.offset(pos, -0.5, 1.45, -0.5),
                     max = vector.offset(pos, 0.5, 1.4, 0.5),
                 },
                 vel = vector.new(0, 0, 0),
-                acc = { x = 0.5 + math.random(-1, 1), y = 2, z = 0.5 + math.random(-1, 1) },
+                acc = {
+                    x = 0.5 + math.random(-1, 1),
+                    y = PARTICLE_MOVEMENT_SPEED,
+                    z = 0.5 + math.random(-1, 1)
+                },
             }
         end,
     }
 }
 
-local players = {}
 local scan_box = vector.new(32, 8, 32)
 local wind_direction = { x = 0, y = 0 } -- TODO: Apply effect.
 
+local players = {}
 minetest.register_on_joinplayer(
     function(player, _)
         table.insert(players, player:get_player_name())
@@ -46,6 +53,7 @@ minetest.register_on_joinplayer(
 )
 
 local function update_particles()
+    -- Show to all players.
     for _, player in pairs(players) do
         local new_player_obj = minetest.get_player_by_name(player)
         if (new_player_obj == nil) then break end
@@ -66,19 +74,23 @@ local function update_particles()
             if (lnode_above.name == "air") then
                 minetest.add_particlespawner({
                     amount = PARTICLE_AMOUNT,
-                    time = 5,
+                    time = SPAWN_INTERVAL,
                     node = { name = lnode.name },
                     object_collision = true,
                     collisiondetection = true,
                     collision_removal = true,
-                    exptime = 3,
+                    exptime = PARTICLE_EXPIRED_TIME,
                     playername = player,
                     pos = {
                         min = vector.offset(lpos_above, -0.5, 0.45, -0.5),
                         max = vector.offset(lpos_above, 0.5, 0.4, 0.5),
                     },
                     vel = vector.new(0, 0, 0),
-                    acc = { x = 0.5 + math.random(-1, 1), y = 2, z = 0.5 + math.random(-1, 1) },
+                    acc = {
+                        x = 0.5 + math.random(-1, 1),
+                        y = PARTICLE_MOVEMENT_SPEED,
+                        z = 0.5 + math.random(-1, 1)
+                    },
                 })
             end
         end
