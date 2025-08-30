@@ -41,6 +41,7 @@ local function spawn_particles_on(pos)
         minsize = 2,
         maxsize = 4,
         vertical = true,
+        glow = 14,
         object_collision = true,
         collisiondetection = true,
         collision_removal = true,
