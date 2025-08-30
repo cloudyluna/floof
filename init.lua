@@ -1,44 +1,37 @@
 -- See README.md for licensing and other information.
 
-local PARTICLE_AMOUNT     = 1
-local SPAWN_INTERVAL      = 1
-
 -- File must be in `textures` directory.
 local SMOKE_PLOOM_TEXTURE = "smoke.png"
 local FIRE_TEXTURE        = "fire.png"
 
 local function spawn_particles_on(pos)
-    local meta = minetest.get_meta(pos)
-    local smoke_layer =
-        minetest.add_particlespawner({
-            amount = 1,
-            time = 3,
-            texture = SMOKE_PLOOM_TEXTURE,
-            minsize = 2,
-            maxsize = 4,
-            vertical = true,
-            object_collision = true,
-            collisiondetection = true,
-            collision_removal = true,
-            maxacc = { x = 0, y = 0.2, z = 0 },
-            minexptime = 0.6,
-            maxexptime = 0.8,
-            minvel = { x = 0, y = 0, z = 0 },
-            maxvel = { x = 0, y = 0.1, z = 0 },
-            animation = {
-                type = "vertical_frames",
-                aspect_w = 16,
-                aspect_h = 16,
-                length = 0.9
-            },
-            minpos = { x = pos.x - 0.1, y = pos.y + 2, z = pos.z - 0.1 },
-            maxpos = { x = pos.x + 0.2, y = pos.y + 2, z = pos.z + 0.2 },
-        })
-
-    meta:set_int("smoke_layer", smoke_layer)
+    minetest.add_particlespawner({
+        amount = 1,
+        time = 3,
+        texture = SMOKE_PLOOM_TEXTURE,
+        minsize = 2,
+        maxsize = 4,
+        vertical = true,
+        object_collision = true,
+        collisiondetection = true,
+        collision_removal = true,
+        maxacc = { x = 0, y = 0.2, z = 0 },
+        minexptime = 0.6,
+        maxexptime = 0.8,
+        minvel = { x = 0, y = 0, z = 0 },
+        maxvel = { x = 0, y = 0.1, z = 0 },
+        animation = {
+            type = "vertical_frames",
+            aspect_w = 16,
+            aspect_h = 16,
+            length = 0.9
+        },
+        minpos = { x = pos.x - 0.1, y = pos.y + 2, z = pos.z - 0.1 },
+        maxpos = { x = pos.x + 0.2, y = pos.y + 2, z = pos.z + 0.2 },
+    })
 
 
-    local fire_layer = minetest.add_particlespawner({
+    minetest.add_particlespawner({
         amount = 3,
         time = 1,
         texture = FIRE_TEXTURE,
@@ -62,17 +55,6 @@ local function spawn_particles_on(pos)
         minpos = { x = pos.x - 0.1, y = pos.y + 0.2, z = pos.z - 0.1 },
         maxpos = { x = pos.x + 0.2, y = pos.y + 1.0, z = pos.z + 0.2 },
     })
-
-    meta:set_int("fire_layer", fire_layer)
-end
-
-local function spawn_particles_off(pos)
-    local meta = minetest.get_meta(pos)
-    local smoke_layer = meta:get_int("smoke_layer")
-    local fire_layer = meta:get_int("fire_layer")
-
-    minetest.delete_particlespawner(smoke_layer)
-    minetest.delete_particlespawner(fire_layer)
 end
 
 minetest.register_abm({
