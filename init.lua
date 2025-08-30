@@ -1,11 +1,12 @@
 -- See README.md for licensing and other information.
 
-local mod_name                 = core.get_current_modname()
+local mod_name                  = core.get_current_modname()
 
 -- File must be in `textures` directory.
-local SMOKE_PLOOM_TEXTURE      = mod_name .. "_smoke.png"
-local FIRE_TEXTURE             = mod_name .. "_fire.png"
-local TUNG_TREE_LEAVES_TEXTURE = mod_name .. "_tree_leaves.png"
+local SMOKE_PLOOM_TEXTURE       = mod_name .. "_smoke.png"
+local FIRE_TEXTURE              = mod_name .. "_fire.png"
+local TUNG_TREE_LEAVES_TEXTURE  = mod_name .. "_tree_leaves.png"
+local CLOUD_OF_PENDULUM_TEXTURE = mod_name .. "_cloud_of_pendulum.png^[makealpha:50,50,50"
 
 local function spawn_particles_on(pos)
     local smoke_definition = {
@@ -89,4 +90,14 @@ core.register_node(mod_name .. ":tung_tree_leaves", {
     light_source = core.LIGHT_MAX - 8,
     waving = 2,
     groups = { snappy = 3 }
+})
+
+
+core.register_node(mod_name .. ":cloud_of_pendulum", {
+    description = "Cloud of Pendulum",
+    tiles = { CLOUD_OF_PENDULUM_TEXTURE },
+    drawtype = "glasslike",
+    sunlight_propagates = true,
+    walkable = true,
+    groups = { oddly_breakable_by_hand = 3, bouncy = -100 }
 })
