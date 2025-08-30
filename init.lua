@@ -8,8 +8,8 @@ local FIRE_TEXTURE             = mod_name .. "_fire.png"
 local TUNG_TREE_LEAVES_TEXTURE = mod_name .. "_tree_leaves.png"
 
 local function spawn_particles_on(pos)
-    minetest.add_particlespawner({
-        amount = 3,
+    local smoke_definition = {
+        amount = 2,
         time = 3,
         texture = SMOKE_PLOOM_TEXTURE,
         minsize = 2,
@@ -20,7 +20,7 @@ local function spawn_particles_on(pos)
         collision_removal = true,
         maxacc = { x = 0, y = 0.2, z = 0 },
         minexptime = 0.6,
-        maxexptime = 0.8,
+        maxexptime = 3,
         minvel = { x = 0, y = 0, z = 0 },
         maxvel = { x = 0, y = 0.1, z = 0 },
         animation = {
@@ -31,10 +31,9 @@ local function spawn_particles_on(pos)
         },
         minpos = { x = pos.x - 0.1, y = pos.y + 0.4, z = pos.z - 0.1 },
         maxpos = { x = pos.x + 0.2, y = pos.y + 1, z = pos.z + 0.2 },
-    })
+    }
 
-
-    minetest.add_particlespawner({
+    local fire_definition = {
         amount = 2,
         time = 1,
         texture = FIRE_TEXTURE,
@@ -46,7 +45,7 @@ local function spawn_particles_on(pos)
         collision_removal = true,
         maxacc = { x = 0, y = 0.2, z = 0 },
         minexptime = 0.6,
-        maxexptime = 0.8,
+        maxexptime = 1,
         minvel = { x = 0, y = 0, z = 0 },
         maxvel = { x = 0, y = 0.1, z = 0 },
         animation = {
@@ -57,7 +56,14 @@ local function spawn_particles_on(pos)
         },
         minpos = { x = pos.x - 0.1, y = pos.y + 0.2, z = pos.z - 0.1 },
         maxpos = { x = pos.x + 0.2, y = pos.y + 1.0, z = pos.z + 0.2 },
-    })
+    }
+
+    local node_above = minetest.get_node({ x = pos.x, y = pos.y + 1, z = pos.z }).name
+
+    if node_above == "air" then
+        minetest.add_particlespawner(smoke_definition)
+        minetest.add_particlespawner(fire_definition)
+    end
 end
 
 minetest.register_abm({
@@ -70,7 +76,6 @@ minetest.register_abm({
     end
 })
 
--- Crafitem
 
 -- Item
 core.register_node(mod_name .. ":tung_tree_leaves", {
