@@ -1,8 +1,11 @@
 -- See README.md for licensing and other information.
 
+local mod_name                 = core.get_current_modname()
+
 -- File must be in `textures` directory.
-local SMOKE_PLOOM_TEXTURE = "smoke.png"
-local FIRE_TEXTURE        = "fire.png"
+local SMOKE_PLOOM_TEXTURE      = mod_name .. "_smoke.png"
+local FIRE_TEXTURE             = mod_name .. "_fire.png"
+local TUNG_TREE_LEAVES_TEXTURE = mod_name .. "_tree_leaves.png"
 
 local function spawn_particles_on(pos)
     minetest.add_particlespawner({
@@ -58,9 +61,9 @@ local function spawn_particles_on(pos)
 end
 
 minetest.register_abm({
-    name = "leaves_burning_particles:spawn_particles",
-    nodenames = { "leaves_burning_particles:tung_leaf" },
-    interval = 1.0,
+    name = mod_name .. ":spawn_fire_and_smoke_particles",
+    nodenames = { mod_name .. ":tung_tree_leaves" },
+    interval = 0,
     chance = 30,
     action = function(pos, node)
         spawn_particles_on(pos)
@@ -70,8 +73,10 @@ minetest.register_abm({
 -- Crafitem
 
 -- Item
-core.register_node("leaves_burning_particles:tung_leaf", {
-    description = "Tung Leaf",
+core.register_node(mod_name .. ":tung_tree_leaves", {
+    description = "Tung Tree Leaves",
+    tiles = { TUNG_TREE_LEAVES_TEXTURE },
+    drawtype = "allfaces_optional",
     sunlight_propagates = true,
     walkable = true,
     waving = 2,
