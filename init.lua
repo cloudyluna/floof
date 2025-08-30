@@ -99,5 +99,50 @@ core.register_node(mod_name .. ":cloud_of_pendulum", {
     drawtype = "glasslike",
     sunlight_propagates = true,
     walkable = true,
-    groups = { oddly_breakable_by_hand = 3, bouncy = -100 }
+    groups = {
+        oddly_breakable_by_hand = 3,
+        fall_damage_add_percent = -100,
+        bouncy = -100
+    }
 })
+
+core.register_on_generated(
+    function(minp, maxp, seed)
+        local rand = PseudoRandom(seed)
+
+        local cloud_blobs_per_chunk = 8
+        for chunk = 1, cloud_blobs_per_chunk do
+            do
+                local min_height = 80
+                local max_height = 250
+                local x = rand:next(minp.x, maxp.x)
+                local y = rand:next(min_height, max_height)
+                local z = rand:next(minp.z, maxp.z)
+
+                local rad_x = rand:next(2, 21)
+                local rad_y = rand:next(1, 2)
+                local rad_z = rand:next(2, 21)
+
+                for direction_x = -rad_x, rad_x do
+                    for direction_y = -rad_y, rad_y do
+                        for direction_z = -rad_z, rad_z do
+                            local distance =
+                                (direction_x * direction_x) / (rad_x * rad_x)
+                                + (direction_y * direction_y) / (rad_y * rad_y)
+                                + (direction_z * direction_z) / (rad_z * rad_z)
+
+                            local spawn_chance = 20
+                            if distance <= 1 then
+                                if rand:next(1, 100) < spawn_chance then
+                                    local pos = { x = x + direction_x, y = y + direction_y, z = z + direction_z }
+                                    if minetest.get_node(pos).name == "air" then
+                                        minetest.set_node(pos, { name = mod_name .. ":cloud_of_pendulum" })
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end)
