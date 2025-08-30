@@ -33,6 +33,7 @@ local function spawn_particles_on(pos)
         maxpos = { x = pos.x + 0.2, y = pos.y + 1, z = pos.z + 0.2 },
     }
 
+    -- FIXME: Emit light.
     local fire_definition = {
         amount = 2,
         time = 1,
@@ -54,8 +55,8 @@ local function spawn_particles_on(pos)
             aspect_h = 16,
             length = 0.7
         },
-        minpos = { x = pos.x - 0.1, y = pos.y + 0.2, z = pos.z - 0.1 },
-        maxpos = { x = pos.x + 0.2, y = pos.y + 1.0, z = pos.z + 0.2 },
+        minpos = { x = pos.x - 0.1, y = pos.y + 0.6, z = pos.z - 0.1 },
+        maxpos = { x = pos.x + 0.2, y = pos.y + 0.8, z = pos.z + 0.2 },
     }
 
     local node_above = minetest.get_node({ x = pos.x, y = pos.y + 1, z = pos.z }).name
@@ -70,7 +71,7 @@ minetest.register_abm({
     name = mod_name .. ":spawn_fire_and_smoke_particles",
     nodenames = { mod_name .. ":tung_tree_leaves" },
     interval = 0,
-    chance = 30,
+    chance = 10,
     action = function(pos, node)
         spawn_particles_on(pos)
     end
@@ -84,6 +85,7 @@ core.register_node(mod_name .. ":tung_tree_leaves", {
     drawtype = "allfaces_optional",
     sunlight_propagates = true,
     walkable = true,
+    light_source = core.LIGHT_MAX - 8,
     waving = 2,
     groups = { snappy = 3 }
 })
