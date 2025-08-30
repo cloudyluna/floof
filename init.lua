@@ -6,7 +6,7 @@ local FIRE_TEXTURE        = "fire.png"
 
 local function spawn_particles_on(pos)
     minetest.add_particlespawner({
-        amount = 1,
+        amount = 3,
         time = 3,
         texture = SMOKE_PLOOM_TEXTURE,
         minsize = 2,
@@ -26,13 +26,13 @@ local function spawn_particles_on(pos)
             aspect_h = 16,
             length = 0.9
         },
-        minpos = { x = pos.x - 0.1, y = pos.y + 2, z = pos.z - 0.1 },
-        maxpos = { x = pos.x + 0.2, y = pos.y + 2, z = pos.z + 0.2 },
+        minpos = { x = pos.x - 0.1, y = pos.y + 0.4, z = pos.z - 0.1 },
+        maxpos = { x = pos.x + 0.2, y = pos.y + 1, z = pos.z + 0.2 },
     })
 
 
     minetest.add_particlespawner({
-        amount = 3,
+        amount = 2,
         time = 1,
         texture = FIRE_TEXTURE,
         minsize = 2,
@@ -59,10 +59,21 @@ end
 
 minetest.register_abm({
     name = "leaves_burning_particles:spawn_particles",
-    nodenames = { "group:leaves" },
+    nodenames = { "leaves_burning_particles:tung_leaf" },
     interval = 1.0,
-    chance = 50,
+    chance = 30,
     action = function(pos, node)
         spawn_particles_on(pos)
     end
+})
+
+-- Crafitem
+
+-- Item
+core.register_node("leaves_burning_particles:tung_leaf", {
+    description = "Tung Leaf",
+    sunlight_propagates = true,
+    walkable = true,
+    waving = 2,
+    groups = { snappy = 3 }
 })
