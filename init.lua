@@ -106,6 +106,34 @@ core.register_node(mod_name .. ":cloud_of_pendulum", {
     }
 })
 
+local function spawn_clouds(rand, volume, radius)
+    for direction_x = -radius.x, radius.x do
+        for direction_y = -radius.y, radius.y do
+            for direction_z = -radius.z, radius.z do
+                local distance =
+                    (direction_x * direction_x) / (radius.x * radius.x)
+                    + (direction_y * direction_y) / (radius.y * radius.y)
+                    + (direction_z * direction_z) / (radius.z * radius.z)
+
+                local spawn_chance = 10
+                if distance <= 1 then
+                    if rand:next(1, 100) < spawn_chance then
+                        local pos = {
+                            x = volume.width + direction_x,
+                            y = volume.height + direction_y,
+                            z = volume.depth + direction_z
+                        }
+
+                        if minetest.get_node(pos).name == "air" then
+                            minetest.set_node(pos, { name = mod_name .. ":cloud_of_pendulum" })
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 core.register_on_generated(
     function(minp, maxp, seed)
         local rand = PseudoRandom(seed)
@@ -113,36 +141,17 @@ core.register_on_generated(
         local cloud_blobs_per_chunk = 2
         for _ = 1, cloud_blobs_per_chunk do
             do
-                local min_height = 100
-                local max_height = 140
-                local x = rand:next(minp.x, maxp.x)
-                local y = rand:next(min_height, max_height)
-                local z = rand:next(minp.z, maxp.z)
-
-                local rad_x = rand:next(2, 21)
-                local rad_y = rand:next(1, 4)
-                local rad_z = rand:next(2, 20)
-
-                for direction_x = -rad_x, rad_x do
-                    for direction_y = -rad_y, rad_y do
-                        for direction_z = -rad_z, rad_z do
-                            local distance =
-                                (direction_x * direction_x) / (rad_x * rad_x)
-                                + (direction_y * direction_y) / (rad_y * rad_y)
-                                + (direction_z * direction_z) / (rad_z * rad_z)
-
-                            local spawn_chance = 10
-                            if distance <= 1 then
-                                if rand:next(1, 100) < spawn_chance then
-                                    local pos = { x = x + direction_x, y = y + direction_y, z = z + direction_z }
-                                    if minetest.get_node(pos).name == "air" then
-                                        minetest.set_node(pos, { name = mod_name .. ":cloud_of_pendulum" })
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
+                spawn_clouds(rand,
+                    {
+                        width = rand:next(minp.x, maxp.x),
+                        height = rand:next(100, 140),
+                        depth = rand:next(minp.z, maxp.z)
+                    },
+                    {
+                        x = rand:next(2, 21),
+                        y = rand:next(1, 4),
+                        z = rand:next(2, 20)
+                    })
             end
         end
     end)
