@@ -108,8 +108,8 @@ core.register_decoration({
         octaves = 3,
         persist = 0.66
     },
-    y_max = 31000,
     y_min = 1,
+    y_max = 31000,
     schematic = TUNG_TREE_SCHEMATIC,
     flags = "place_center_x, place_center_z",
     rotation = "random",
