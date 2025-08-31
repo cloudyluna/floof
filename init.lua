@@ -97,6 +97,8 @@ core.register_node(mod_name .. ":cloud_of_pendulum", {
     description = "Cloud of Pendulum",
     tiles = { CLOUD_OF_PENDULUM_TEXTURE },
     drawtype = "glasslike",
+    use_texture_alpha = "blend",
+    paramtype = "light",
     sunlight_propagates = true,
     walkable = true,
     groups = {
