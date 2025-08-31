@@ -7,8 +7,9 @@ local mod_path                  = core.get_modpath(mod_name)
 local SMOKE_PLOOM_TEXTURE       = mod_name .. "_smoke.png"
 local FIRE_TEXTURE              = mod_name .. "_fire.png"
 local TUNG_TREE_LEAVES_TEXTURE  = mod_name .. "_tree_leaves.png"
-local TUNG_TREE_SCHEMATIC       = mod_path .. "/schematics/" .. mod_name .. "_tung_tree.mts"
-local CLOUD_OF_PENDULUM_TEXTURE = mod_name .. "_cloud_of_pendulum.png^[makealpha:50,50,50"
+local TUNG_TREE_SAPLING_TEXTURE = mod_name .. "_tree_sapling.png"
+local TUNG_TREE_SCHEMATIC_PATH  = mod_path .. "/schematics/" .. mod_name .. "_tung_tree.mts"
+local CLOUD_OF_PENDULUM_TEXTURE = mod_name .. "_cloud_of_pendulum.png"
 
 local function spawn_particles_on(pos)
     local smoke_definition = {
@@ -80,8 +81,43 @@ minetest.register_abm({
     end
 })
 
+core.register_node(mod_name .. ":tung_tree_sapling", {
+    description = "Tung Tree Sapling",
+    tiles = { TUNG_TREE_SAPLING_TEXTURE },
+    drawtype = "plantlike",
+    inventory_image = TUNG_TREE_SAPLING_TEXTURE,
+    paramtype = "light",
+    sunlight_propagates = true,
+    walkable = false,
+    on_timer = nil,
+    selection_box = {
+        type = "fixed",
+        fixed = { -4 / 16, -0.5, -4 / 16, 4 / 16, 7 / 16, 4 / 16 }
+    },
+    groups = {
+        snappy = 2,
+        dig_immediate = 3,
+        flammable = 2,
+        attached_node = 1,
+        sapling = 1
+    },
+    sounds = default.node_sound_leaves_defaults(),
+})
 
--- Item
+default.register_sapling_growth(mod_name .. ":tung_tree_sapling", {
+    can_grow       = default.can_grow,
+    on_grow_failed = default.on_grow_failed,
+    grow           = function(pos)
+        minetest.place_schematic({
+                x = pos.x - 4,
+                y = pos.y - 1,
+                z = pos.z - 4
+            }, TUNG_TREE_SCHEMATIC_PATH, "random", nil,
+            false)
+    end
+})
+
+
 core.register_node(mod_name .. ":tung_tree_leaves", {
     description = "Tung Tree Leaves",
     tiles = { TUNG_TREE_LEAVES_TEXTURE },
@@ -90,7 +126,25 @@ core.register_node(mod_name .. ":tung_tree_leaves", {
     walkable = true,
     light_source = core.LIGHT_MAX - 10,
     waving = 2,
-    groups = { snappy = 3 }
+    groups = { snappy = 3, leafdecay = 3, flammable = 2, leaves = 1 },
+    drop = {
+        max_items = 1,
+        items = {
+            {
+                items = { mod_name .. ":tung_tree_sapling" },
+                rarity = 20,
+            },
+            {
+                items = { mod_name .. ":tung_tree_leaves" },
+            }
+        }
+    }
+})
+
+default.register_leafdecay({
+    trunks = { "default:tree" },
+    leaves = { mod_name .. ":tung_tree_leaves" },
+    radius = 4
 })
 
 
@@ -100,17 +154,10 @@ core.register_decoration({
     deco_type = "schematic",
     place_on = "default:dirt_with_grass",
     sidelen = 16,
-    noise_params = {
-        offset = 0.024,
-        scale = 0.015,
-        spread = { x = 250, y = 250, z = 250 },
-        seed = 2,
-        octaves = 3,
-        persist = 0.66
-    },
+    fill_ratio = 0.0020,
     y_min = 1,
     y_max = 31000,
-    schematic = TUNG_TREE_SCHEMATIC,
+    schematic = TUNG_TREE_SCHEMATIC_PATH,
     flags = "place_center_x, place_center_z",
     rotation = "random",
     -- TODO: Add our own biomes?
