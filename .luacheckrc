@@ -2,7 +2,6 @@ unused_args = false
 allow_defined_top = true
 
 globals = {
-    "minetest",
 }
 
 read_globals = {
@@ -15,4 +14,6 @@ read_globals = {
 
     -- MTG
     "default", "sfinv", "creative",
+
+    "minetest", "core", "PseudoRandom",
 }
