@@ -110,18 +110,18 @@ core.register_on_generated(
     function(minp, maxp, seed)
         local rand = PseudoRandom(seed)
 
-        local cloud_blobs_per_chunk = 8
-        for chunk = 1, cloud_blobs_per_chunk do
+        local cloud_blobs_per_chunk = 2
+        for _ = 1, cloud_blobs_per_chunk do
             do
-                local min_height = 80
-                local max_height = 250
+                local min_height = 100
+                local max_height = 140
                 local x = rand:next(minp.x, maxp.x)
                 local y = rand:next(min_height, max_height)
                 local z = rand:next(minp.z, maxp.z)
 
                 local rad_x = rand:next(2, 21)
-                local rad_y = rand:next(1, 2)
-                local rad_z = rand:next(2, 21)
+                local rad_y = rand:next(1, 4)
+                local rad_z = rand:next(2, 20)
 
                 for direction_x = -rad_x, rad_x do
                     for direction_y = -rad_y, rad_y do
@@ -131,7 +131,7 @@ core.register_on_generated(
                                 + (direction_y * direction_y) / (rad_y * rad_y)
                                 + (direction_z * direction_z) / (rad_z * rad_z)
 
-                            local spawn_chance = 20
+                            local spawn_chance = 10
                             if distance <= 1 then
                                 if rand:next(1, 100) < spawn_chance then
                                     local pos = { x = x + direction_x, y = y + direction_y, z = z + direction_z }
