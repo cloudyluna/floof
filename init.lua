@@ -1,11 +1,13 @@
 -- See README.md for licensing and other information.
 
 local mod_name                  = core.get_current_modname()
+local mod_path                  = core.get_modpath(mod_name)
 
 -- File must be in `textures` directory.
 local SMOKE_PLOOM_TEXTURE       = mod_name .. "_smoke.png"
 local FIRE_TEXTURE              = mod_name .. "_fire.png"
 local TUNG_TREE_LEAVES_TEXTURE  = mod_name .. "_tree_leaves.png"
+local TUNG_TREE_SCHEMATIC       = mod_path .. "/schematics/" .. mod_name .. "_tung_tree.mts"
 local CLOUD_OF_PENDULUM_TEXTURE = mod_name .. "_cloud_of_pendulum.png^[makealpha:50,50,50"
 
 local function spawn_particles_on(pos)
@@ -34,7 +36,6 @@ local function spawn_particles_on(pos)
         maxpos = { x = pos.x + 0.2, y = pos.y + 1, z = pos.z + 0.2 },
     }
 
-    -- FIXME: Emit light.
     local fire_definition = {
         amount = 2,
         time = 1,
@@ -42,7 +43,7 @@ local function spawn_particles_on(pos)
         minsize = 2,
         maxsize = 4,
         vertical = true,
-        glow = 14,
+        glow = core.LIGHT_MAX,
         object_collision = true,
         collisiondetection = true,
         collision_removal = true,
@@ -87,9 +88,39 @@ core.register_node(mod_name .. ":tung_tree_leaves", {
     drawtype = "allfaces_optional",
     sunlight_propagates = true,
     walkable = true,
-    light_source = core.LIGHT_MAX - 8,
+    light_source = core.LIGHT_MAX - 10,
     waving = 2,
     groups = { snappy = 3 }
+})
+
+
+-- Tree generation.
+core.register_decoration({
+    name = mod_name .. ":tung_tree",
+    deco_type = "schematic",
+    place_on = "default:dirt_with_grass",
+    sidelen = 16,
+    noise_params = {
+        offset = 0.024,
+        scale = 0.015,
+        spread = { x = 250, y = 250, z = 250 },
+        seed = 2,
+        octaves = 3,
+        persist = 0.66
+    },
+    y_max = 31000,
+    y_min = 1,
+    schematic = TUNG_TREE_SCHEMATIC,
+    flags = "place_center_x, place_center_z",
+    rotation = "random",
+    -- TODO: Add our own biomes?
+    biomes = {
+        "grassland",
+        "grassland_ocean",
+        "deciduous_forest",
+        "deciduous_forest_shore",
+        "deciduous_forest_ocean"
+    },
 })
 
 
@@ -108,7 +139,7 @@ core.register_node(mod_name .. ":cloud_of_pendulum", {
     }
 })
 
-local function spawn_clouds(rand, volume, radius)
+local function spawn_clouds_of_pendulum(rand, volume, radius)
     for direction_x = -radius.x, radius.x do
         for direction_y = -radius.y, radius.y do
             for direction_z = -radius.z, radius.z do
@@ -136,6 +167,7 @@ local function spawn_clouds(rand, volume, radius)
     end
 end
 
+-- Clouds.
 core.register_on_generated(
     function(minp, maxp, seed)
         local rand = PseudoRandom(seed)
@@ -143,7 +175,7 @@ core.register_on_generated(
         local cloud_blobs_per_chunk = 2
         for _ = 1, cloud_blobs_per_chunk do
             do
-                spawn_clouds(rand,
+                spawn_clouds_of_pendulum(rand,
                     {
                         width = rand:next(minp.x, maxp.x),
                         height = rand:next(100, 140),
