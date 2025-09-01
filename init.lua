@@ -168,7 +168,9 @@ if table_contains(enabled_mods, "bonemeal") then
     })
 end
 
--- FIXME: Make only top 90 degree layer bouncy.
+-- The cloud block is bouncy from all sides. This enable
+-- player to collect the blocks and build bouncy structures,
+-- say a bouncy castle.
 core.register_node(mod_name .. ":cloud_of_pendulum", {
     description = "Cloud of Pendulum",
     tiles = { CLOUD_OF_PENDULUM_TEXTURE },
