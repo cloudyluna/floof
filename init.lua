@@ -107,14 +107,14 @@ core.register_node(mod_name .. ":tung_tree_sapling", {
     sounds = default.node_sound_leaves_defaults(),
 })
 
--- FIXME: Ensure sapling growth replace the exact axis of this sapling.
 local function grow_tung_tree(pos)
+    core.remove_node(pos) -- Remove the planted tree sapling first.
     minetest.place_schematic({
-            x = pos.x - 3,
+            x = pos.x - 2,
             y = pos.y,
             z = pos.z - 2
-        }, TUNG_TREE_SCHEMATIC_PATH, "0", nil,
-        true)
+        }, TUNG_TREE_SCHEMATIC_PATH, "random", nil,
+        false)
 end
 
 default.register_sapling_growth(mod_name .. ":tung_tree_sapling", {
@@ -149,7 +149,7 @@ core.register_node(mod_name .. ":tung_tree_leaves", {
 default.register_leafdecay({
     trunks = { "default:tree" },
     leaves = { mod_name .. ":tung_tree_leaves" },
-    radius = 4
+    radius = 7
 })
 
 local function table_contains(tbl, x)
