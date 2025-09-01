@@ -3,6 +3,7 @@
 local mod_name                  = core.get_current_modname()
 local mod_path                  = core.get_modpath(mod_name)
 local enabled_mods              = core.get_modnames()
+local BIOMES                    = { tung_forest = "tung_forest" }
 
 -- File must be in `textures` directory.
 local SMOKE_PLOOM_TEXTURE       = mod_name .. "_smoke.png"
@@ -106,6 +107,7 @@ core.register_node(mod_name .. ":tung_tree_sapling", {
     sounds = default.node_sound_leaves_defaults(),
 })
 
+-- FIXME: Ensure sapling growth replace the exact axis of this sapling.
 local function grow_tung_tree(pos)
     minetest.place_schematic({
             x = pos.x - 3,
@@ -150,29 +152,6 @@ default.register_leafdecay({
     radius = 4
 })
 
-
--- Tree generation.
-core.register_decoration({
-    name = mod_name .. ":tung_tree",
-    deco_type = "schematic",
-    place_on = "default:dirt_with_grass",
-    sidelen = 16,
-    fill_ratio = 0.0020,
-    y_min = 1,
-    y_max = 31000,
-    schematic = TUNG_TREE_SCHEMATIC_PATH,
-    flags = "place_center_x, place_center_z",
-    rotation = "random",
-    -- TODO: Add our own biomes?
-    biomes = {
-        "grassland",
-        "grassland_ocean",
-        "deciduous_forest",
-        "deciduous_forest_shore",
-        "deciduous_forest_ocean"
-    },
-})
-
 local function table_contains(tbl, x)
     local found = false
     for _, v in pairs(tbl) do
@@ -189,7 +168,7 @@ if table_contains(enabled_mods, "bonemeal") then
     })
 end
 
-
+-- FIXME: Make only top 90 degree layer bouncy.
 core.register_node(mod_name .. ":cloud_of_pendulum", {
     description = "Cloud of Pendulum",
     tiles = { CLOUD_OF_PENDULUM_TEXTURE },
@@ -201,11 +180,11 @@ core.register_node(mod_name .. ":cloud_of_pendulum", {
     groups = {
         oddly_breakable_by_hand = 3,
         fall_damage_add_percent = -100,
-        bouncy = -100
+        bouncy = 100
     }
 })
 
-local function spawn_clouds_of_pendulum(rand, volume, radius)
+local function spawn_clouds_of_pendulum(rand, spawn_chance, volume, radius)
     for direction_x = -radius.x, radius.x do
         for direction_y = -radius.y, radius.y do
             for direction_z = -radius.z, radius.z do
@@ -214,7 +193,6 @@ local function spawn_clouds_of_pendulum(rand, volume, radius)
                     + (direction_y * direction_y) / (radius.y * radius.y)
                     + (direction_z * direction_z) / (radius.z * radius.z)
 
-                local spawn_chance = 10
                 if distance <= 1 then
                     if rand:next(1, 100) < spawn_chance then
                         local pos = {
@@ -223,8 +201,13 @@ local function spawn_clouds_of_pendulum(rand, volume, radius)
                             z = volume.depth + direction_z
                         }
 
-                        if minetest.get_node(pos).name == "air" then
-                            minetest.set_node(pos, { name = mod_name .. ":cloud_of_pendulum" })
+                        local biome_id = core.get_biome_data(pos).biome
+                        local current_biome_name = core.get_biome_name(biome_id)
+
+                        if current_biome_name ~= nil and current_biome_name == BIOMES.tung_forest then
+                            if minetest.get_node(pos).name == "air" then
+                                minetest.set_node(pos, { name = mod_name .. ":cloud_of_pendulum" })
+                            end
                         end
                     end
                 end
@@ -237,20 +220,56 @@ core.register_on_generated(
     function(minp, maxp, seed)
         local rand = PseudoRandom(seed)
 
-        local cloud_blobs_per_chunk = 2
+        local cloud_blobs_per_chunk = 4
         for _ = 1, cloud_blobs_per_chunk do
-            do
-                spawn_clouds_of_pendulum(rand,
-                    {
-                        width = rand:next(minp.x, maxp.x),
-                        height = rand:next(100, 140),
-                        depth = rand:next(minp.z, maxp.z)
-                    },
-                    {
-                        x = rand:next(2, 21),
-                        y = rand:next(1, 4),
-                        z = rand:next(2, 20)
-                    })
-            end
+            spawn_clouds_of_pendulum(rand,
+                10,
+                {
+                    width = rand:next(minp.x, maxp.x),
+                    height = rand:next(40, 140),
+                    depth = rand:next(minp.z, maxp.z)
+                },
+                {
+                    x = rand:next(2, 21),
+                    y = rand:next(1, 4),
+                    z = rand:next(2, 20)
+                })
         end
     end)
+
+
+core.register_biome({
+    name = BIOMES.tung_forest,
+    node_top = "default:dirt_with_grass",
+    depth_top = 1,
+    node_filler = "default:dirt",
+    depth_filler = 3,
+    y_min = 1,
+    y_max = 31000,
+    heat_point = 50,
+    humidity = 50,
+})
+
+core.register_decoration({
+    name = mod_name .. ":tung_tree",
+    deco_type = "schematic",
+    place_on = "default:dirt_with_grass",
+    sidelen = 16,
+    -- This is the same generation noise for apple tree from "default".
+    noise_params = {
+        offset = 0.024,
+        scale = 0.015,
+        spread = { x = 250, y = 250, z = 250 },
+        seed = 2,
+        octaves = 3,
+        persist = 0.66
+    },
+    y_min = 1,
+    y_max = 31000,
+    schematic = TUNG_TREE_SCHEMATIC_PATH,
+    flags = "place_center_x, place_center_z",
+    rotation = "random",
+    biomes = {
+        BIOMES.tung_forest,
+    },
+})
