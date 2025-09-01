@@ -2,6 +2,7 @@
 
 local mod_name                  = core.get_current_modname()
 local mod_path                  = core.get_modpath(mod_name)
+local enabled_mods              = core.get_modnames()
 
 -- File must be in `textures` directory.
 local SMOKE_PLOOM_TEXTURE       = mod_name .. "_smoke.png"
@@ -10,6 +11,7 @@ local TUNG_TREE_LEAVES_TEXTURE  = mod_name .. "_tree_leaves.png"
 local TUNG_TREE_SAPLING_TEXTURE = mod_name .. "_tree_sapling.png"
 local TUNG_TREE_SCHEMATIC_PATH  = mod_path .. "/schematics/" .. mod_name .. "_tung_tree.mts"
 local CLOUD_OF_PENDULUM_TEXTURE = mod_name .. "_cloud_of_pendulum.png"
+
 
 local function spawn_particles_on(pos)
     local smoke_definition = {
@@ -104,19 +106,20 @@ core.register_node(mod_name .. ":tung_tree_sapling", {
     sounds = default.node_sound_leaves_defaults(),
 })
 
+local function grow_tung_tree(pos)
+    minetest.place_schematic({
+            x = pos.x - 3,
+            y = pos.y,
+            z = pos.z - 2
+        }, TUNG_TREE_SCHEMATIC_PATH, "0", nil,
+        true)
+end
+
 default.register_sapling_growth(mod_name .. ":tung_tree_sapling", {
     can_grow       = default.can_grow,
     on_grow_failed = default.on_grow_failed,
-    grow           = function(pos)
-        minetest.place_schematic({
-                x = pos.x - 4,
-                y = pos.y - 1,
-                z = pos.z - 4
-            }, TUNG_TREE_SCHEMATIC_PATH, "random", nil,
-            false)
-    end
+    grow           = grow_tung_tree,
 })
-
 
 core.register_node(mod_name .. ":tung_tree_leaves", {
     description = "Tung Tree Leaves",
@@ -170,6 +173,22 @@ core.register_decoration({
     },
 })
 
+local function table_contains(tbl, x)
+    local found = false
+    for _, v in pairs(tbl) do
+        if v == x then
+            found = true
+        end
+    end
+    return found
+end
+
+if table_contains(enabled_mods, "bonemeal") then
+    bonemeal:add_sapling({
+        { mod_name .. ":tung_tree_sapling", grow_tung_tree, "soil" }
+    })
+end
+
 
 core.register_node(mod_name .. ":cloud_of_pendulum", {
     description = "Cloud of Pendulum",
@@ -214,7 +233,6 @@ local function spawn_clouds_of_pendulum(rand, volume, radius)
     end
 end
 
--- Clouds.
 core.register_on_generated(
     function(minp, maxp, seed)
         local rand = PseudoRandom(seed)

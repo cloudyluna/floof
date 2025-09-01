@@ -16,4 +16,6 @@ read_globals = {
     "default", "sfinv", "creative",
 
     "minetest", "core", "PseudoRandom",
+
+    "bonemeal",
 }
