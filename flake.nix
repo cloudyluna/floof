@@ -24,14 +24,12 @@
           with pkgs;
           pkgs.mkShell rec {
             # lua 5.1 is luanti's default lua version.
-            nativeBuildInputs = [
+            buildInputs = [
               luanti-client
               lua51Packages.lua
               lua51Packages.luacheck
               stylua
-            ];
-            buildInputs = [
-
+              typst
             ];
 
             LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";
