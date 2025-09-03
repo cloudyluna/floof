@@ -5,12 +5,18 @@ local mod_path                  = core.get_modpath(mod_name)
 local enabled_mods              = core.get_modnames()
 local BIOMES                    = { tung_forest = "tung_forest" }
 
--- File must be in `textures` directory.
 local SMOKE_PLOOM_TEXTURE       = mod_name .. "_smoke.png"
 local FIRE_TEXTURE              = mod_name .. "_fire.png"
+local TUNG_TREE_SIDE_TEXTURE    = mod_name .. "_tung_tree_side.png"
+local TUNG_TREE_INNER_TEXTURE   = mod_name .. "_tung_tree_inner.png"
 local TUNG_TREE_LEAVES_TEXTURE  = mod_name .. "_tree_leaves.png"
 local TUNG_TREE_SAPLING_TEXTURE = mod_name .. "_tree_sapling.png"
 local TUNG_TREE_SCHEMATIC_PATH  = mod_path .. "/schematics/" .. mod_name .. "_tung_tree.mts"
+local TUNG_ORE_TEXTURE          = mod_name .. "_tung_ore.png"
+local TUNG_INGOT_TEXTURE        = mod_name .. "_tung_ingot.png"
+local TUNG_PICKAXE_TEXTURE      = mod_name .. "_tung_pickaxe.png"
+local TUNG_AXE_TEXTURE          = mod_name .. "_tung_axe.png"
+local TUNG_SHOVEL_TEXTURE       = mod_name .. "_tung_shovel.png"
 local CLOUD_OF_PENDULUM_TEXTURE = mod_name .. "_cloud_of_pendulum.png"
 
 
@@ -136,20 +142,19 @@ core.register_node(mod_name .. ":tung_tree_leaves", {
         max_items = 1,
         items = {
             {
-                items = { mod_name .. ":tung_tree_sapling" },
-                rarity = 20,
+                rarity = 100,
+                items  = { "default:coal_lump" }
             },
             {
+                rarity = 20,
+                items = { mod_name .. ":tung_tree_sapling" },
+            },
+            {
+                rarity = 1,
                 items = { mod_name .. ":tung_tree_leaves" },
             }
         }
     }
-})
-
-default.register_leafdecay({
-    trunks = { "default:tree" },
-    leaves = { mod_name .. ":tung_tree_leaves" },
-    radius = 7
 })
 
 local function table_contains(tbl, x)
@@ -239,6 +244,54 @@ core.register_on_generated(
         end
     end)
 
+core.register_node(mod_name .. ":tung_tree", {
+    description = "Tung Tree",
+    tiles = {
+        TUNG_TREE_INNER_TEXTURE, TUNG_TREE_INNER_TEXTURE, -- +Y, -Y
+        TUNG_TREE_SIDE_TEXTURE, TUNG_TREE_SIDE_TEXTURE,   -- +X, -X
+        TUNG_TREE_SIDE_TEXTURE, TUNG_TREE_SIDE_TEXTURE }, -- +Z, -Z
+    groups = { tree = 1, choppy = 2, oddly_breakable_by_hand = 1, flammable = 2 },
+    drop = {
+        max_items = 1,
+        items = {
+            {
+                rarity = 880,
+                tool_groups = { "tung_tool" },
+                items = {
+                    "default:tree", mod_name .. ":tung_ore",
+                    "default:diamond",
+                    "default:gold_lump",
+
+                }
+            },
+            {
+                rarity = 420,
+                tool_groups = { "tung_tool" },
+                items = { "default:tree", mod_name .. ":tung_ore", "default:diamond", "default:coal_lump" }
+            },
+            {
+                rarity = 350,
+                tool_groups = { "tung_tool" },
+                items = { "default:tree", mod_name .. ":tung_ore" }
+            },
+            {
+                rarity = 250,
+                items = { "default:tree", "default:tree" }
+            },
+            {
+                rarity = 1,
+                items = { "default:tree" }
+            }
+        }
+    },
+    sounds = default.node_sound_wood_defaults()
+})
+
+default.register_leafdecay({
+    trunks = { mod_name .. ":tung_tree" },
+    leaves = { mod_name .. ":tung_tree_leaves" },
+    radius = 7
+})
 
 core.register_biome({
     name = BIOMES.tung_forest,
@@ -274,4 +327,120 @@ core.register_decoration({
     biomes = {
         BIOMES.tung_forest,
     },
+})
+
+core.register_node(mod_name .. ":tung_ore", {
+    description = "Tung Ore",
+    tiles = { TUNG_ORE_TEXTURE },
+    is_ground_content = true,
+    groups = { cracky = 3, stone = 1 },
+    drop = mod_name .. ":tung_ore",
+    sounds = default.node_sound_stone_defaults(),
+})
+
+core.register_craftitem(mod_name .. ":tung_ingot", {
+    description = "Tung Ingot",
+    inventory_image = TUNG_INGOT_TEXTURE,
+})
+
+core.register_tool(mod_name .. ":tung_pickaxe", {
+    description       = "Tung Pickaxe",
+    inventory_image   = TUNG_PICKAXE_TEXTURE,
+    tool_capabilities = {
+        full_punch_interval = 1.5,
+        max_drop_level = 1,
+        groupcaps = {
+            cracky = {
+                maxlevel = 2,
+                uses = 20,
+                times = { [1] = 0.45, [2] = 0.35, [3] = 0.25 }
+            },
+        },
+        damage_groups = {
+            fleshy = 2
+        }
+    },
+    sound             = { breaks = "default_tool_breaks" },
+    groups            = { pickaxe = 1, flammable = 2, tung_tool = 1 }
+})
+
+core.register_tool(mod_name .. ":tung_axe", {
+    description       = "Tung Axe",
+    inventory_image   = TUNG_AXE_TEXTURE,
+    tool_capabilities = {
+        full_punch_interval = 1.5,
+        max_drop_level = 1,
+        groupcaps = {
+            choppy = {
+                maxlevel = 2,
+                uses = 20,
+                times = { [1] = 0.50, [2] = 0.40, [3] = 0.30 }
+            },
+        },
+        damage_groups = {
+            fleshy = 2
+        }
+    },
+    sound             = { breaks = "default_tool_breaks" },
+    groups            = { axe = 1, flammable = 2, tung_tool = 1 }
+})
+
+
+core.register_tool(mod_name .. ":tung_shovel", {
+    description       = "Tung Shovel",
+    inventory_image   = TUNG_SHOVEL_TEXTURE,
+    tool_capabilities = {
+        full_punch_interval = 1.5,
+        max_drop_level = 1,
+        groupcaps = {
+            crumbly = {
+                maxlevel = 2,
+                uses = 20,
+                times = { [1] = 0.5, [2] = 0.10, [3] = 0.15 }
+            },
+        },
+        damage_groups = {
+            fleshy = 2
+        }
+    },
+    sound             = { breaks = "default_tool_breaks" },
+    groups            = { shovel = 1, flammable = 2, tung_tool = 1 }
+})
+
+core.register_craft({
+    type = "shaped",
+    output = mod_name .. ":tung_pickaxe 1",
+    recipe = {
+        { mod_name .. ":tung_ingot", mod_name .. ":tung_ingot", mod_name .. ":tung_ingot" },
+        { "",                        "default:stick",           "" },
+        { "",                        "default:stick",           "" }
+    }
+})
+
+
+core.register_craft({
+    type = "shaped",
+    output = mod_name .. ":tung_axe 1",
+    recipe = {
+        { mod_name .. ":tung_ingot", mod_name .. ":tung_ingot", "" },
+        { mod_name .. ":tung_ingot", "default:stick",           "" },
+        { "",                        "default:stick",           "" }
+    }
+})
+
+core.register_craft({
+    type = "shaped",
+    output = mod_name .. ":tung_shovel 1",
+    recipe = {
+        { "", mod_name .. ":tung_ingot", "" },
+        { "", "default:stick",           "" },
+        { "", "default:stick",           "" }
+    }
+})
+
+core.register_craft({
+    type = "cooking",
+    output = mod_name .. ":tung_ingot",
+    recipe = mod_name .. ":tung_ore",
+    cooktime = 30
 })
