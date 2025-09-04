@@ -1,6 +1,6 @@
 # Floof
 
-Some fluffy biomes and item set inspired by Minecraft's BicBiomeCraft and other mods.
+Add BicBiomeCraft inspired biomes, tools, and items.
 
 ![](screenshot.png)
 
