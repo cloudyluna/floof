@@ -29,7 +29,6 @@
               lua51Packages.lua
               lua51Packages.luacheck
               stylua
-              typst
             ];
 
             LD_LIBRARY_PATH = "${lib.makeLibraryPath buildInputs}";

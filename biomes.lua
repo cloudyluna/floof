@@ -62,7 +62,7 @@ core.register_on_generated(
                 10,
                 {
                     width = rand:next(minp.x, maxp.x),
-                    height = rand:next(40, 140),
+                    height = rand:next(40, 160),
                     depth = rand:next(minp.z, maxp.z)
                 },
                 {
@@ -93,7 +93,7 @@ core.register_decoration({
     flags = "place_center_x, place_center_z",
     rotation = "random",
     biomes = {
-        entities.TUNG.BIOMES.TUNG_FOREST,
+        entities.TUNG.BIOMES.TUNG_FOREST
     },
 })
 
