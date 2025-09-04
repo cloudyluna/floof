@@ -35,7 +35,7 @@ WIP (more coming soon ^^)
 
 ## Version
 
-0.1.0
+0.2.0
 
 ## Art credits
 
