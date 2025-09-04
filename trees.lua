@@ -105,8 +105,17 @@ local function grow_tung_tree(pos)
             x = pos.x - 2,
             y = pos.y,
             z = pos.z - 2
-        }, assets.TUNG.SCHEMATICS.TREE, "random", nil,
+        },
+        assets.TUNG.SCHEMATICS.TREE,
+        "random",
+        nil,
         false)
+end
+
+if util.table_contains(util.enabled_mods, "bonemeal") then
+    bonemeal:add_sapling({
+        { entities.TUNG.TREE_SAPLING, grow_tung_tree, "soil" }
+    })
 end
 
 default.register_sapling_growth(entities.TUNG.TREE_SAPLING, {
@@ -115,8 +124,7 @@ default.register_sapling_growth(entities.TUNG.TREE_SAPLING, {
     grow           = grow_tung_tree,
 })
 
-
-local function spawn_particles_on(pos)
+local function generate_smoke_particles(pos)
     local smoke_definition = {
         amount = 2,
         time = 3,
@@ -138,12 +146,20 @@ local function spawn_particles_on(pos)
             aspect_h = 16,
             length = 0.9
         },
-        minpos = { x = pos.x - 0.1, y = pos.y + 0.4, z = pos.z - 0.1 },
-        maxpos = { x = pos.x + 0.2, y = pos.y + 1, z = pos.z + 0.2 },
+        minpos = { x = pos.x - 0.1, y = pos.y + 0.6, z = pos.z - 0.1 },
+        maxpos = { x = pos.x + 0.2, y = pos.y + 1.2, z = pos.z + 0.2 },
     }
 
+    local node_above = minetest.get_node({ x = pos.x, y = pos.y + 1, z = pos.z }).name
+
+    if node_above == "air" then
+        minetest.add_particlespawner(smoke_definition)
+    end
+end
+
+local function generate_fire_particles(pos)
     local fire_definition = {
-        amount = 2,
+        amount = 1,
         time = 1,
         texture = assets.EFFECTS.TEXTURES.FIRE,
         minsize = 2,
@@ -155,7 +171,7 @@ local function spawn_particles_on(pos)
         collision_removal = true,
         maxacc = { x = 0, y = 0.2, z = 0 },
         minexptime = 0.6,
-        maxexptime = 1,
+        maxexptime = 0.9,
         minvel = { x = 0, y = 0, z = 0 },
         maxvel = { x = 0, y = 0.1, z = 0 },
         animation = {
@@ -171,23 +187,23 @@ local function spawn_particles_on(pos)
     local node_above = minetest.get_node({ x = pos.x, y = pos.y + 1, z = pos.z }).name
 
     if node_above == "air" then
-        minetest.add_particlespawner(smoke_definition)
         minetest.add_particlespawner(fire_definition)
     end
 end
 
+
 minetest.register_abm({
-    name = util.modname .. ":spawn_fire_and_smoke_particles",
+    name = util.modname .. ":generate_fire_particles",
     nodenames = { entities.TUNG.TREE_LEAVES },
     interval = 0,
-    chance = 10,
-    action = function(pos, node)
-        spawn_particles_on(pos)
-    end
+    chance = 15,
+    action = generate_fire_particles
 })
 
-if util.table_contains(util.enabled_mods, "bonemeal") then
-    bonemeal:add_sapling({
-        { entities.TUNG.TREE_SAPLING, grow_tung_tree, "soil" }
-    })
-end
+minetest.register_abm({
+    name = util.modname .. ":generate_smoke_particles",
+    nodenames = { entities.TUNG.TREE_LEAVES },
+    interval = 1,
+    chance = 20,
+    action = generate_smoke_particles
+})
