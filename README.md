@@ -42,6 +42,10 @@ WIP (more coming soon ^^)
 - Tung textures from [BicBiomeCraft](https://www.curseforge.com/minecraft/mc-mods/bicbiomecraft).
 - Smoke and fire particles textures from [smoke_signal mod](https://content.luanti.org/packages/Just_Visiting/smoke_signals/).
 
+## Reporting issues
+
+Please go to [issues](https://github.com/cloudyluna/floof/issues).
+
 ## License
 
 This mod is released under the same distributed Luanti license which is LGPL-2.1. For further information, please see `LICENSE` file.
