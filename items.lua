@@ -12,6 +12,41 @@ core.register_node(entities.TUNG.ORE, {
     sounds = default.node_sound_stone_defaults(),
 })
 
+minetest.register_ore({
+    ore_type       = "scatter",
+    ore            = entities.TUNG.ORE,
+    wherein        = "default:stone",
+    clust_scarcity = 13 * 13 * 13,
+    clust_num_ores = 5,
+    clust_size     = 3,
+    y_max          = 31000,
+    y_min          = 1025,
+})
+
+minetest.register_ore({
+    ore_type       = "scatter",
+    ore            = entities.TUNG.ORE,
+    wherein        = "default:stone",
+    clust_scarcity = 15 * 15 * 15,
+    clust_num_ores = 3,
+    clust_size     = 2,
+    y_max          = -64,
+    y_min          = -255,
+})
+
+minetest.register_ore({
+    ore_type       = "scatter",
+    ore            = entities.TUNG.ORE,
+    wherein        = "default:stone",
+    clust_scarcity = 13 * 13 * 13,
+    clust_num_ores = 5,
+    clust_size     = 3,
+    y_max          = -256,
+    y_min          = -31000,
+})
+
+
+
 core.register_craftitem(entities.TUNG.INGOT, {
     description = "Tung Ingot",
     inventory_image = assets.TUNG.TEXTURES.INGOT,

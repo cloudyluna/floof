@@ -13,11 +13,17 @@ Add BicBiomeCraft inspired biomes, tools, and items.
 
 Pickaxe, axe and shovel tools. Can remove blocks very quickly.
 
+#### Ores & Ingots
+
+- Tung ore. Requires more or stronger fuel source to smelt. Shares depth and rarity of gold ores.
+- Tung ingot. The product when tung ore has been smelted. Can be crafted into
+poweferful Tung tools.
+
 #### Tree
 
 - Leaves have a chance to drop a coal lump along with sapling.
 
-- Tree log/trunk could drop a block of tung ore, diamond gem or a coal lump. ***Must use one of the tung tools to chop the log for these loot drops***.
+- Tree log/trunk could drop a block of tung ore, diamond gem or a coal lump. ***Must use one of the Tung tools to chop the log for these loot drops***.
 
 - Cosmetic effect: Leaves will emit smoke and fire particles indefinitely.
 
@@ -35,16 +41,17 @@ WIP (more coming soon ^^)
 
 ## Version
 
-0.2.0
+0.2.1
 
 ## Art credits
 
-- Tung textures from [BicBiomeCraft](https://www.curseforge.com/minecraft/mc-mods/bicbiomecraft).
-- Smoke and fire particles textures from [smoke_signal mod](https://content.luanti.org/packages/Just_Visiting/smoke_signals/).
+- Original trees, weapons and blocks textures from [BicBiomeCraft](https://github.com/tung362/BicBiomeCraft) by Tung Nguyen under the [MIT license](https://github.com/tung362/BicBiomeCraft/blob/main/LICENSE).
+- Smoke and fire particles textures from [smoke_signal mod](https://content.luanti.org/packages/Just_Visiting/smoke_signals/) by Just_Visiting under the [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en) license.
 
 ## Reporting issues
 
-Please go to [issues](https://github.com/cloudyluna/floof/issues).
+Please go to [issues](https://github.com/cloudyluna/floof/issues) if you want to report a bug or submit a 
+suggestion.
 
 ## License
 
