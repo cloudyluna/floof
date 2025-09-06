@@ -101,7 +101,7 @@ core.register_node(entities.TUNG.TREE_SAPLING, {
 
 local function grow_tung_tree(pos)
     core.remove_node(pos) -- Remove the planted tree sapling first.
-    minetest.place_schematic({
+    core.place_schematic({
             x = pos.x - 2,
             y = pos.y,
             z = pos.z - 2
@@ -150,10 +150,10 @@ local function generate_smoke_particles(pos)
         maxpos = { x = pos.x + 0.2, y = pos.y + 1.2, z = pos.z + 0.2 },
     }
 
-    local node_above = minetest.get_node({ x = pos.x, y = pos.y + 1, z = pos.z }).name
+    local node_above = core.get_node({ x = pos.x, y = pos.y + 1, z = pos.z }).name
 
     if node_above == "air" then
-        minetest.add_particlespawner(smoke_definition)
+        core.add_particlespawner(smoke_definition)
     end
 end
 
@@ -184,15 +184,15 @@ local function generate_fire_particles(pos)
         maxpos = { x = pos.x + 0.2, y = pos.y + 0.8, z = pos.z + 0.2 },
     }
 
-    local node_above = minetest.get_node({ x = pos.x, y = pos.y + 1, z = pos.z }).name
+    local node_above = core.get_node({ x = pos.x, y = pos.y + 1, z = pos.z }).name
 
     if node_above == "air" then
-        minetest.add_particlespawner(fire_definition)
+        core.add_particlespawner(fire_definition)
     end
 end
 
 
-minetest.register_abm({
+core.register_abm({
     name = util.modname .. ":generate_fire_particles",
     nodenames = { entities.TUNG.TREE_LEAVES },
     interval = 0,
@@ -200,7 +200,7 @@ minetest.register_abm({
     action = generate_fire_particles
 })
 
-minetest.register_abm({
+core.register_abm({
     name = util.modname .. ":generate_smoke_particles",
     nodenames = { entities.TUNG.TREE_LEAVES },
     interval = 1,

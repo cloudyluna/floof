@@ -15,7 +15,7 @@ read_globals = {
     -- MTG
     "default", "sfinv", "creative",
 
-    "minetest", "core", "PseudoRandom",
+    "core", "PseudoRandom",
 
     "bonemeal",
 }

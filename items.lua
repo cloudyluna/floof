@@ -12,7 +12,7 @@ core.register_node(entities.TUNG.ORE, {
     sounds = default.node_sound_stone_defaults(),
 })
 
-minetest.register_ore({
+core.register_ore({
     ore_type       = "scatter",
     ore            = entities.TUNG.ORE,
     wherein        = "default:stone",
@@ -23,7 +23,7 @@ minetest.register_ore({
     y_min          = 1025,
 })
 
-minetest.register_ore({
+core.register_ore({
     ore_type       = "scatter",
     ore            = entities.TUNG.ORE,
     wherein        = "default:stone",
@@ -34,7 +34,7 @@ minetest.register_ore({
     y_min          = -255,
 })
 
-minetest.register_ore({
+core.register_ore({
     ore_type       = "scatter",
     ore            = entities.TUNG.ORE,
     wherein        = "default:stone",
@@ -57,11 +57,11 @@ core.register_tool(entities.TUNG.PICKAXE, {
     inventory_image   = assets.TUNG.TEXTURES.PICKAXE,
     tool_capabilities = {
         full_punch_interval = 1.5,
-        max_drop_level = 1,
+        max_drop_level = 3,
         groupcaps = {
             cracky = {
-                maxlevel = 2,
-                uses = 20,
+                maxlevel = 3,
+                uses = 60,
                 times = { [1] = 0.45, [2] = 0.35, [3] = 0.25 }
             },
         },
@@ -78,11 +78,11 @@ core.register_tool(entities.TUNG.AXE, {
     inventory_image   = assets.TUNG.TEXTURES.AXE,
     tool_capabilities = {
         full_punch_interval = 1.5,
-        max_drop_level = 1,
+        max_drop_level = 3,
         groupcaps = {
             choppy = {
-                maxlevel = 2,
-                uses = 20,
+                maxlevel = 3,
+                uses = 60,
                 times = { [1] = 0.50, [2] = 0.40, [3] = 0.30 }
             },
         },
@@ -100,11 +100,11 @@ core.register_tool(entities.TUNG.SHOVEL, {
     inventory_image   = assets.TUNG.TEXTURES.SHOVEL,
     tool_capabilities = {
         full_punch_interval = 1.5,
-        max_drop_level = 1,
+        max_drop_level = 3,
         groupcaps = {
             crumbly = {
-                maxlevel = 2,
-                uses = 20,
+                maxlevel = 3,
+                uses = 60,
                 times = { [1] = 0.5, [2] = 0.10, [3] = 0.15 }
             },
         },

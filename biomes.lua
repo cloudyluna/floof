@@ -41,8 +41,8 @@ local function spawn_clouds_of_pendulum(rand, spawn_chance, volume, radius)
                         local current_biome_name = core.get_biome_name(biome_id)
 
                         if current_biome_name ~= nil and current_biome_name == entities.TUNG.BIOMES.TUNG_FOREST then
-                            if minetest.get_node(pos).name == "air" then
-                                minetest.set_node(pos, { name = entities.PENDULUM.CLOUD })
+                            if core.get_node(pos).name == "air" then
+                                core.set_node(pos, { name = entities.PENDULUM.CLOUD })
                             end
                         end
                     end
