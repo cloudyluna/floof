@@ -53,6 +53,15 @@ WIP (more coming soon ^^)
 Please go to [issues](https://github.com/cloudyluna/floof/issues) if you want to report a bug or submit a
 suggestion.
 
+### Radicle repository
+
+- RID: `rad:z2tRR3CN4iN5E7a3rQrfGzMuProMo`
+- Radicle clone: `rad clone rad:z2tRR3CN4iN5E7a3rQrfGzMuProMo`
+- Git clone: `git clone https://seed.radicle.garden/z2tRR3CN4iN5E7a3rQrfGzMuProMo.git floof`
+- Direct download: `curl -OJ https://seed.radicle.garden/raw/rad:z2tRR3CN4iN5E7a3rQrfGzMuProMo/archive/main`
+
+Online repository browser: [app.radicle.xyz](https://app.radicle.xyz/nodes/seed.radicle.garden/rad%3Az2tRR3CN4iN5E7a3rQrfGzMuProMo)
+
 ## License
 
 This mod is released under the same distributed Luanti license which is LGPL-2.1. For further information, please see `LICENSE` file.
