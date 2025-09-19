@@ -35,7 +35,7 @@ powerful Tung tools.
 
 - Solid, semi-transparent bouncy clouds in the sky which can only be found in `tung_forest` biome. Player can break them and use as building blocks.
 
-# Status
+## Status
 
 WIP (more coming soon ^^)
 
