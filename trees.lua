@@ -126,8 +126,8 @@ default.register_sapling_growth(entities.TUNG.TREE_SAPLING, {
 
 local function generate_smoke_particles(pos)
     local smoke_definition = {
-        amount = 2,
-        time = 3,
+        amount = 5,
+        time = 2,
         texture = assets.EFFECTS.TEXTURES.SMOKE,
         minsize = 2,
         maxsize = 4,
@@ -136,10 +136,10 @@ local function generate_smoke_particles(pos)
         collisiondetection = true,
         collision_removal = true,
         maxacc = { x = 0, y = 0.2, z = 0 },
-        minexptime = 0.6,
-        maxexptime = 3,
+        minexptime = 12,
+        maxexptime = 19,
         minvel = { x = 0, y = 0, z = 0 },
-        maxvel = { x = 0, y = 0.1, z = 0 },
+        maxvel = { x = 0, y = 0.3, z = 0 },
         animation = {
             type = "vertical_frames",
             aspect_w = 16,
